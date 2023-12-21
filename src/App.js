@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { SettingsProvider } from './context/SettingsContext';
+import RecommendationForm from './components/RecommendationForm';
+import SettingsModal from './components/SettingsModal';
 
-function App() {
+const App = () => {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const handleSettingsClick = () => {
+    setIsSettingsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsSettingsOpen(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <SettingsProvider>
+      <Router>
+        <div className="container">
+          {isSettingsOpen && <SettingsModal onClose={handleClose} />}
+          <Routes>
+            <Route path="/" element={<RecommendationForm onSettingsClick={handleSettingsClick} />} />
+          </Routes>
+        </div>
+      </Router>
+    </SettingsProvider>
   );
-}
+};
 
 export default App;
